@@ -7,12 +7,12 @@ include "quadEM.template"
 # We replace the choices for the Range
 record(mbbo,"$(P)$(R)Range") {
     field(ZRVL,"0")
-    field(ZRST,"+- 50 mA")
+    field(ZRST,"+- 50 uA")
 }
 
 record(mbbi,"$(P)$(R)Range_RBV") {
     field(ZRVL,"0")
-    field(ZRST,"+- 50 mA")
+    field(ZRST,"+- 50 uA")
 }
 
 # We replace the choices for the TriggerMode
