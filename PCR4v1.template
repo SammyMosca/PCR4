@@ -1,0 +1,111 @@
+# Database for SenSic PCR4 picoammeter
+#   Mark Rivers
+#   July 15, 2015
+
+include "quadEM.template"
+
+# We replace the choices for the Range
+record(mbbo,"$(P)$(R)Range") {
+    field(ZRVL,"0")
+    field(ZRST,"+- 50 mA")
+}
+
+record(mbbi,"$(P)$(R)Range_RBV") {
+    field(ZRVL,"0")
+    field(ZRST,"+- 50 mA")
+}
+
+# We replace the choices for the TriggerMode
+record(mbbo,"$(P)$(R)TriggerMode") {
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "2")
+    field(ONST, "ON")
+}
+
+record(mbbi,"$(P)$(R)TriggerMode_RBV") {
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "2")
+    field(ONST, "ON")
+}
+
+record(bo,"$(P)$(R)TriggerPolarity") {
+    field(DESC, "Trigger polarity")
+    field(PINI, "YES")
+    field(ZNAM, "Rising")
+    field(ONAM, "Falling")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT) 0)QE_TRIGGER_POLARITY")
+}
+
+record(bi,"$(P)$(R)TriggerPolarity_RBV") {
+    field(DESC, "Trigger polarity")
+    field(ZNAM, "Rising")
+    field(ONAM, "Falling")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT) 0)QE_TRIGGER_POLARITY")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbo,"$(P)$(R)Geometry") {
+    field(DESC, "Position geometry")
+    field(PINI, "YES")
+    field(ZRVL, "0")
+    field(ZRST, "Diamond")
+    field(ONVL, "1")
+    field(ONST, "Square")
+    field(TWVL, "2")
+    field(TWST, "Square-SiC")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT) 0)QE_GEOMETRY")
+}
+
+record(mbbi,"$(P)$(R)Geometry_RBV") {
+    field(DESC, "Position geometry")
+    field(ZRVL, "0")
+    field(ZRST, "Diamond")
+    field(ONVL, "1")
+    field(ONST, "Square")
+    field(TWVL, "2")
+    field(TWST, "Square-SiC")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT) 0)QE_GEOMETRY")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo,"$(P)$(R)ReadFormat") {
+    field(DESC, "Read format")
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT) 0)QE_READ_FORMAT")
+    field(ONAM, "")
+    field(ZNAM, "ASCII")
+}
+
+record(bi,"$(P)$(R)ReadFormat_RBV") {
+    field(DESC, "Read format")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT) 0)QE_READ_FORMAT")
+    field(ONAM, "")
+    field(ZNAM, "ASCII")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo,"$(P)$(R)BiasInterlock") {
+    field(DESC, "Bias interlock")
+    field(PINI, "YES")
+    field(ZNAM, "OFF")
+    field(ONAM, "")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT) 0)QE_BIAS_INTERLOCK")
+}
+
+record(bi,"$(P)$(R)BiasInterlock_RBV") {
+    field(DESC, "Bias interlock")
+    field(ZNAM, "OFF")
+    field(ONAM, "")
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT) 0)QE_BIAS_INTERLOCK")
+    field(SCAN, "I/O Intr")
+}
