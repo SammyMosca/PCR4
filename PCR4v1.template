@@ -91,21 +91,3 @@ record(bi,"$(P)$(R)ReadFormat_RBV") {
     field(ZNAM, "ASCII")
     field(SCAN, "I/O Intr")
 }
-
-record(bo,"$(P)$(R)BiasInterlock") {
-    field(DESC, "Bias interlock")
-    field(PINI, "YES")
-    field(ZNAM, "OFF")
-    field(ONAM, "")
-    field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT) 0)QE_BIAS_INTERLOCK")
-}
-
-record(bi,"$(P)$(R)BiasInterlock_RBV") {
-    field(DESC, "Bias interlock")
-    field(ZNAM, "OFF")
-    field(ONAM, "")
-    field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(PORT) 0)QE_BIAS_INTERLOCK")
-    field(SCAN, "I/O Intr")
-}
