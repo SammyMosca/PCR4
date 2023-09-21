@@ -467,7 +467,7 @@ asynStatus drvPCR4::setAcquireParams()
     if ((prevAcquiring) || (triggerMode)) setAcquire(0);
 
     // Compute the sample time.  This is 10 microseconds times valuesPerRead. 
-    sampleTime = 10e-6 * valuesPerRead;
+    sampleTime = 19e-6 * valuesPerRead;
     setDoubleParam(P_SampleTime, sampleTime);
 
     // Compute the number of values that will be accumulated in the ring buffer before averaging
@@ -639,8 +639,8 @@ asynStatus drvPCR4::readStatus()
     if (sscanf(inString_, "SPR:%d", &valuesPerRead) != 1) goto error;
     setIntegerParam(P_ValuesPerRead, valuesPerRead);
 
-    // Compute the sample time.  This is 10 microseconds times valuesPerRead. 
-    sampleTime = 10e-6 * valuesPerRead;
+    // Compute the sample time. 
+    sampleTime = 19e-6 * valuesPerRead;
     setDoubleParam(P_SampleTime, sampleTime);
 
     strcpy(outString_, "BIASSTATUS:?");
