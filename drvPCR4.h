@@ -18,6 +18,8 @@ public:
     drvPCR4(const char *portName, const char *QEPortName, int ringBufferSize);
     
     /* These are the methods we implement from asynPortDriver */
+    virtual asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[],
+                                size_t nElements, size_t *nIn);
     void report(FILE *fp, int details);
                  
     /* These are the methods that are new to this class */
@@ -50,6 +52,7 @@ private:
     int numResync_;
     char *QEPortName_;
     char firmwareVersion_[MAX_COMMAND_LEN];
+    int versionNumber_;
     char outString_[MAX_COMMAND_LEN];
     char inString_[MAX_COMMAND_LEN];
     asynStatus sendCommand();

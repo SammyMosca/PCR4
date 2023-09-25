@@ -42,6 +42,18 @@
 static const char *driverName="drvPCR4";
 static void readThread(void *drvPvt);
 
+static const char *ranges_v1[] = {
+    "+- 50 uA"
+};
+
+static const char *ranges_v2[] = {
+    "+- 50 mA",
+    "+- 250 uA",
+    "+- 2.5 uA",
+    "+- 25 nA"
+};
+
+
 
 /** Constructor for the drvPCR4 class.
   * Calls the constructor for the drvQuadEM base class.
@@ -284,8 +296,11 @@ asynStatus drvPCR4::getFirmwareVersion()
     setAcquire(0);
     status = writeReadMeter();
     if (status == asynSuccess) {
-        strcpy(firmwareVersion_, &inString_[4]);
+        strcpy(firmwareVersion_, &inString_[8]);
         setStringParam(P_Firmware, firmwareVersion_);
+        // Get the revision number "PCR4vx"
+        char* pos = strstr(inString_, "PCR4v");
+        versionNumber_ = atoi(pos + 5);
     }
     return status;
 }
@@ -412,6 +427,7 @@ asynStatus drvPCR4::setAcquire(epicsInt32 value)
 
         // It also has the effect of flusing any stale input
         setAcquireParams();
+        getIntegerParam(P_TriggerMode,&triggerMode);
 	if (triggerMode == 0) {
         	status = pasynOctetSyncIO->write(pasynUserMeter_, "ACQC:START", strlen("ACQC:START"), 
                             PCR4_TIMEOUT, &nwrite);
@@ -679,6 +695,60 @@ void drvPCR4::exitHandler()
     lock();
     setAcquire(0);
     unlock();
+}
+
+/** Called when asyn clients call pasynEnum->read().
+  * The base class implementation simply prints an error message.
+  * Derived classes may reimplement this function if required.
+  * \param[in] pasynUser pasynUser structure that encodes the reason and address.
+  * \param[in] strings Array of string pointers.
+  * \param[in] values Array of values
+  * \param[in] severities Array of severities
+  * \param[in] nElements Size of value array
+  * \param[out] nIn Number of elements actually returned */
+asynStatus drvPCR4::readEnum(asynUser *pasynUser,
+        char *strings[], int values[], int severities[], size_t nElements, size_t *nIn)
+{
+    int function = pasynUser->reason;
+    const char *functionName = "readEnum";
+
+    if (function == P_Range)
+    {
+        const char **ranges = NULL;
+        size_t numRanges = 0;
+        switch (versionNumber_) {
+            case 1:
+                ranges = ranges_v1;
+                numRanges = sizeof(ranges_v1)/sizeof(char*);
+                break;
+            case 2:
+                ranges = ranges_v2;
+                numRanges = sizeof(ranges_v2)/sizeof(char*);
+                break;
+            default:
+                *nIn = 0;
+                return asynError;
+        }
+
+        size_t i = 0;
+        for (i=0; ((i<numRanges) && (i<nElements)); i++)
+        {
+            if (strings[i]) free(strings[i]);
+            strings[i] = epicsStrDup(ranges[i]);
+            asynPrint(this->pasynUserSelf, ASYN_TRACE_FLOW,
+                    "%s:%s: Reading pass energy of %s\n",
+                    driverName, functionName, strings[i]);
+            values[i] = (int)i;
+            severities[i] = 0;
+        }
+        *nIn = i;
+    }
+    else
+    {
+        *nIn = 0;
+        return asynError;
+    }
+    return asynSuccess;
 }
 
 /** Report  parameters 
