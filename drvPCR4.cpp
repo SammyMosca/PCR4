@@ -88,7 +88,7 @@ drvPCR4::drvPCR4(const char *portName, const char *QEPortName, int ringBufferSiz
     acquiring_ = 0;
     readingActive_ = 0;
     resolution_ = 24;
-    setIntegerParam(P_Model, 11);
+    setIntegerParam(P_Model, QE_ModelPCR4);
     setIntegerParam(P_ValuesPerRead, 5);
 
     // Do everything that needs to be done when connecting to the meter initially.
